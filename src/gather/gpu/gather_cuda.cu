@@ -4,8 +4,7 @@
 #include <cuda_runtime.h>
 #include <cuda_fp16.h> 
 #include <mma.h>
-#include <string.h>
-#include <complex.h>
+#include <cuComplex.h>
 
 struct KernelParams {
     int64_t rank;
@@ -108,7 +107,7 @@ extern "C" void launchGatherKernel(
         int threadsPerBlock = 256;
         int blocksPerGrid = (output_size + threadsPerBlock - 1) / threadsPerBlock;
 
-
+    
         if (strcmp(dtype, "float") == 0){
             gather_kernel_float<<<blocksPerGrid, threadsPerBlock, threadsPerBlock * sizeof(float), stream>>>(params, static_cast<float*>(inputTensor), indexTensor, static_cast<float*>(outputTensor));
         }
@@ -139,6 +138,11 @@ extern "C" void launchGatherKernel(
         else if (strcmp(dtype, "bool") == 0) {
             gather_kernel<bool><<<blocksPerGrid, threadsPerBlock, threadsPerBlock * sizeof(bool), stream>>>(params, static_cast<bool*>(inputTensor), indexTensor, static_cast<bool*>(outputTensor));
         }
-
+        else if (strcmp(dtype, "complex64") == 0) {
+            gather_kernel<cuComplex><<<blocksPerGrid, threadsPerBlock, threadsPerBlock * sizeof(cuComplex), stream>>>(params, static_cast<cuComplex*>(inputTensor), indexTensor, static_cast<cuComplex*>(outputTensor));
+        }
+        else if (strcmp(dtype, "complex128") == 0) {
+            gather_kernel<cuDoubleComplex><<<blocksPerGrid, threadsPerBlock, threadsPerBlock * sizeof(cuDoubleComplex), stream>>>(params, static_cast<cuDoubleComplex*>(inputTensor), indexTensor, static_cast<cuDoubleComplex*>(outputTensor));
+        }
     
 }
