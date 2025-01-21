@@ -5,6 +5,27 @@ project(MyCUDAProject)
 # 查找 Python 库
 find_package(Python3 REQUIRED)
 include_directories(${Python3_INCLUDE_DIRS})
+# 查找 cuDNN
+
+# 查找 cuBLAS 头文件
+find_path(CUBLAS_INCLUDE_DIR cublas_v2.h
+          PATHS ${CUDA_TOOLKIT_ROOT_DIR}/include
+                $ENV{CUDA_HOME}/include
+          DOC "Path to cuBLAS header files")
+
+# 查找 cuBLAS 库文件
+find_library(CUBLAS_LIBRARY NAMES libcublas.so cublas
+             PATHS ${CUDA_TOOLKIT_ROOT_DIR}/lib64
+                   $ENV{CUDA_HOME}/lib64
+             DOC "Path to cuBLAS library")
+
+if (CUBLAS_INCLUDE_DIR AND CUBLAS_LIBRARY)
+    set(CUBLAS_FOUND TRUE)
+    message(STATUS "Found cuBLAS: ${CUBLAS_LIBRARY}")
+    include_directories(${CUBLAS_INCLUDE_DIR})
+else()
+    message(FATAL_ERROR "Could not find cuBLAS.")
+endif()
 
 # 设置 CUDA 编译选项
 set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -O3")

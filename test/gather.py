@@ -9,8 +9,9 @@ import performance
 import sys
 import os
 
-lib_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.././src/gather/gpu/cuda_gather.dll')
+lib_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.././build/lib/libmy_library.so')
 lib = ctypes.CDLL(lib_path)
+
 lib.launchGatherKernel.argtypes = [
     ctypes.c_int64,
     ctypes.c_int64,  # axis

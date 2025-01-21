@@ -5,7 +5,7 @@
 #include <cuda_fp16.h> 
 #include <mma.h>
 #include <string.h>
-
+#include <complex.h>
 
 struct KernelParams {
     int64_t rank;
@@ -89,8 +89,7 @@ __global__ void gather_kernel_half(const KernelParams params, const __half* __re
 
 }
 
-extern "C" {
-    __declspec(dllexport) void launchGatherKernel(
+extern "C" void launchGatherKernel(
         const int64_t rank,
         const int64_t axis,
         void* inputTensor,
@@ -141,5 +140,5 @@ extern "C" {
             gather_kernel<bool><<<blocksPerGrid, threadsPerBlock, threadsPerBlock * sizeof(bool), stream>>>(params, static_cast<bool*>(inputTensor), indexTensor, static_cast<bool*>(outputTensor));
         }
 
-    }
+    
 }

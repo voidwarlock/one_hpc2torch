@@ -1,5 +1,4 @@
 #include <cuda.h>
-
 const int TM = 8;
 const int TN = 8;
 const int BLOCK_DIM_x = 16;
