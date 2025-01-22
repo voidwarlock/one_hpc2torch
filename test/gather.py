@@ -101,10 +101,12 @@ test_cases = [
         ((3, 2), (2, 2), 0, torch.float32, "cuda"),
         ((3, 2), (1, 2), 1, torch.float32, "cuda"),
         ((50257, 768), (16, 1024), 0, torch.float32, "cuda"),
+        ((2, 3, 4, 5), (2, 4), 2, torch.float32, "cuda"),
 
         ((3, 2), (2, 2), 0, torch.float16, "cuda"),
         ((3, 2), (1, 2), 1, torch.float16, "cuda"),
         ((50257, 768), (16, 1024), 0, torch.float16, "cuda"),
+        ((2, 3, 4, 5), (2, 4), 2, torch.float16, "cuda"),
 ]
 filtered_test_cases = [
     (inputShape , indexShape, axis, test_dtype, device)

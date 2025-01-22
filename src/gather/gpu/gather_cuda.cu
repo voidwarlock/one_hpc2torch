@@ -29,7 +29,7 @@ __global__ void gather_kernel(const KernelParams params, const T* __restrict__ i
 
 __global__ void gather_kernel_float(const KernelParams params, const float* __restrict__ inputTensor, const int64_t* __restrict__ indexTensor, float* __restrict__ outputTensor) {
 
-    if(params.axis != params.rank - 1)
+    if(params.axis != params.rank - 1 && params.rank <= 2)
     {
         const int64_t idx = blockIdx.x * blockDim.x + threadIdx.x;
         if (idx < params.num_indices * params.stride_axis / 2) {
@@ -59,7 +59,7 @@ __global__ void gather_kernel_float(const KernelParams params, const float* __re
 
 __global__ void gather_kernel_half(const KernelParams params, const __half* __restrict__ inputTensor, const int64_t* __restrict__ indexTensor, __half* __restrict__ outputTensor) {
 
-    if(params.axis != params.rank - 1)
+    if(params.axis != params.rank - 1 && params.rank <= 2)
     {
         int64_t idx = blockIdx.x * blockDim.x + threadIdx.x;
         if (idx < params.num_indices * params.stride_axis / 2) {
